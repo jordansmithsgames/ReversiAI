@@ -4,23 +4,18 @@ namespace GameAI.GamePlaying
 {
     public class StudentAI : Behavior
     {
-        private int maxDepth;
-
         // Constructor; creates a new Minimax AI agent behavior
-        public StudentAI() {
-            maxDepth = 0;
-        }
+        public StudentAI() {}
 
         // Implementation of Minimax. Determines the best move for the player specified by color on the given 
         // board, looking ahead the number of steps indicated by lookAheadDepth. This method will not be called
         // unless there is at least one possible move for the player specified by color.
         public ComputerMove Run(int color, Board board, int lookAheadDepth) {
-            maxDepth = lookAheadDepth;
-            return Minimax(color, board, 0);
+            return Minimax(color, board, 0, lookAheadDepth);
         }
 
         // Recursive method that utilizes the Minimax algorithm to help the player make the best move
-        private ComputerMove Minimax(int player, Board board, int depth) {
+        private ComputerMove Minimax(int player, Board board, int depth, int maxDepth) {
             ComputerMove bestMove = null;
             Board boardState = new Board();
 
@@ -32,7 +27,7 @@ namespace GameAI.GamePlaying
                         boardState.MakeMove(player, row, col);
 
                         if (boardState.IsTerminalState() || depth == maxDepth) move.rank = Evaluate(boardState);
-                        else move.rank = Minimax(GetNextPlayer(player, boardState), boardState, depth + 1).rank;
+                        else move.rank = Minimax(GetNextPlayer(player, boardState), boardState, depth + 1, maxDepth).rank;
                         if (bestMove == null || betterMove(player, move.rank, bestMove.rank)) bestMove = move;
                     }
                 }
@@ -61,6 +56,7 @@ namespace GameAI.GamePlaying
             return value;
         }
 
+        // Determines if a move is better than the best move known so far
         private bool betterMove(int player, int moveRank, int bestMoveRank) {
             bool isBetterMove = false;
             if (player == -1 && moveRank < bestMoveRank) isBetterMove = true; // Black wants negative
@@ -68,6 +64,7 @@ namespace GameAI.GamePlaying
             return isBetterMove;
         }
 
+        // Checks if the player has to forfeit a turn to their opponent
         private int GetNextPlayer(int player, Board board) {
             Board boardState = new Board();
             boardState.Copy(board);
