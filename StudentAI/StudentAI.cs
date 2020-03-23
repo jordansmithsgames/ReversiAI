@@ -1,5 +1,4 @@
 using GameAI.GamePlaying.Core;
-using GameAI.GamePlaying.ExampleAI; // Remove after completing exercise
 
 namespace GameAI.GamePlaying
 {
@@ -23,10 +22,10 @@ namespace GameAI.GamePlaying
             max = color;
             min = -color;
             maxDepth = lookAheadDepth;
-            return Minimax(color, board, /*-10000, 10000,*/ 0);
+            return Minimax(color, board, 0);
         }
 
-        private ComputerMove Minimax(int player, Board board, /*int alpha, int beta,*/ int depth) {
+        private ComputerMove Minimax(int player, Board board, int depth) {
             ComputerMove bestMove = null;
             Board boardState = new Board();
 
@@ -37,23 +36,13 @@ namespace GameAI.GamePlaying
                         boardState.Copy(board);
                         boardState.MakeMove(player, row, col);
 
-                        if (boardState.IsTerminalState() || depth == maxDepth) 
-                            move.rank = ExampleAI.MinimaxExample.EvaluateTest(boardState);
-                            //move.rank = Evaluate(boardState);
-                        else
-                            move.rank = Minimax(GetNextPlayer(player, boardState), boardState, /*alpha, beta,*/ depth + 1).rank;
+                        if (boardState.IsTerminalState() || depth == maxDepth) move.rank = Evaluate(boardState);
+                        else move.rank = Minimax(GetNextPlayer(player, boardState), boardState, depth + 1).rank;
 
-                        if (bestMove == null || betterMove(player, move.rank, bestMove.rank)) {
-                            bestMove = move;
-                            /*if (player == max && bestMove.rank > alpha) alpha = bestMove.rank;
-                            else if (player == min && bestMove.rank < beta) beta = bestMove.rank;
-                            if (alpha >= beta) return bestMove;*/
-                        }
-                        System.Console.WriteLine("Move for (" + row + ", " + col + ")'s rank: " + move.rank);
+                        if (bestMove == null || betterMove(player, move.rank, bestMove.rank)) bestMove = move;
                     }
                 }
             }
-            System.Console.WriteLine("Best move's rank: " + bestMove.rank);
             return bestMove;
         }
 
@@ -66,20 +55,9 @@ namespace GameAI.GamePlaying
                     int color = board.GetTile(row, col);
                     if (color != 0) {
                         int tileValue = color;
-                        // Check if tile is a corner
-                        bool tlCorner = row == 0 && col == 0;
-                        bool trCorner = row == 0 && col == 7;
-                        bool blCorner = row == 7 && col == 0;
-                        bool brCorner = row == 7 && col == 7;
-                        // Check if tile is not a corner but on edge
-                        bool lColumn = 0 < row && row < 7 && col == 0;
-                        bool rColumn = 0 < row && row < 7 && col == 7;
-                        bool tRow = row == 0 && 0 < col && col < 7;
-                        bool bRow = row == 7 && 0 < col && col < 7;
-
-                        if (tlCorner || trCorner || blCorner || brCorner)
-                            tileValue *= 100;
-                        else if (lColumn || rColumn || tRow || bRow)
+                        if (row == 0 || row == 7)
+                            tileValue *= 10;
+                        if (col == 0 || col == 7)
                             tileValue *= 10;
                         value += tileValue;
                     }
@@ -94,8 +72,8 @@ namespace GameAI.GamePlaying
 
         private bool betterMove(int player, int moveRank, int bestMoveRank) {
             bool isBetterMove = false;
-            if (player == max && moveRank > bestMoveRank) isBetterMove = true;
-            if (player == min && moveRank < bestMoveRank) isBetterMove = true;
+            if (player == max && moveRank < bestMoveRank) isBetterMove = true; // Black wants negative
+            if (player == min && moveRank > bestMoveRank) isBetterMove = true; // White wants positive
             return isBetterMove;
         }
 
