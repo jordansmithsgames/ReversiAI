@@ -1,5 +1,5 @@
 # ReversiAI
-![](https://github.com/jordansmithsgames/jordansmithsgames/blob/main/readmes/pathplanner/astar.gif)
+![](https://github.com/jordansmithsgames/jordansmithsgames/blob/main/readmes/reversiai/aitime.gif)
 
 ReversiAI is a AI program that plays the game Reversi (more commonly known as Othello) that I worked on during my AI for Games class at the University of Florida. All work done was in StudentAI/StudentAI.cs, where the program's AI algorithms were implemented.
 
