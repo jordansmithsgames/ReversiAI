@@ -1,5 +1,7 @@
 # ReversiAI
-**ReversiAI** is a AI program that plays the game Reversi (more commonly known as Othello) that I worked on during my AI for Games class at the University of Florida. All work done was in StudentAI/StudentAI.cs, where the program's AI algorithms were implemented.
+![](https://github.com/jordansmithsgames/jordansmithsgames/blob/main/readmes/pathplanner/astar.gif)
+
+ReversiAI is a AI program that plays the game Reversi (more commonly known as Othello) that I worked on during my AI for Games class at the University of Florida. All work done was in StudentAI/StudentAI.cs, where the program's AI algorithms were implemented.
 
 ## Usage
 Open the project's in Visual Studio Enterprise 2019 and press Ctrl + F5 to start the program. You can change the AI algorithm being used by going to Game -> Options... -> Players and selecting the corresponding AI implementation for either Black or White. You can also pick 'User' instead for either option to play Reversi yourself against the chosen AI.
